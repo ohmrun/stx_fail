@@ -1,0 +1,11 @@
+{
+  "build" : {
+    "-cp"  : ["src/main/haxe"],
+    "-lib" : [],
+    "unit" : {
+      "--macro" : [
+        "include('stx.fail',true)"
+      ]
+    }
+  }
+}

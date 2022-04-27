@@ -37,6 +37,7 @@ typedef Decline<E>          = stx.fail.Decline<E>;
 typedef DeclineSum<E>       = stx.fail.Decline.DeclineSum<E>;
 typedef RefuseDef<E>        = stx.fail.Refuse.RefuseDef<E>;
 typedef Refuse<E>           = stx.fail.Refuse<E>;
+typedef Refused             = stx.fail.Refuse<Dynamic>;
 typedef Error<E>            = stx.fail.Error<E>;
 typedef ErrorCls<E>         = stx.fail.Error.ErrorCls<E>;
 typedef ErrorApi<E>         = stx.fail.Error.ErrorApi<E>;

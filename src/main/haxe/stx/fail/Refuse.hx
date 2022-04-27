@@ -1,5 +1,6 @@
 package stx.fail;
 
+import haxe.ds.Either;
 /**
   Either an INTERIOR (unhandled) or EXTERIOR (E) Error
 **/
@@ -26,6 +27,21 @@ typedef RefuseDef<E> = Error<Decline<E>>;
   }
   public function errate<EE>(fn:E->EE):Refuse<EE>{
     return new stx.fail.term.MapAnon(this,Decline._.map.bind(_,fn)).toError();
+  }
+  static public function catcher(self:Error<Dynamic>):Either<Error<Dynamic>,Refuse<Dynamic>>{
+    final _enum : Enum<Dynamic> = Type.getEnum(EXTERIOR(null));
+    return switch(self.data){
+      case Some(x) : switch(std.Type.typeof(x)){
+        case TEnum(e) : switch(e){
+          case x if (x == _enum) : 
+            Right((Refuse.lift(cast self)));
+          default :
+            Left(self.elide());
+        }
+        default : Left(self.elide());
+      }
+      default : Left(self.elide());
+    }
   }
 }
 class RefuseLift{

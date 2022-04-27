@@ -2,6 +2,12 @@ package stx.fail;
 
 using stx.fail.Error;
 
+function map<Ti,Tii>(self:Option<Ti>,fn:Ti->Tii){
+  return switch(self){
+    case Some(tI) : Some(fn(tI));
+    default       : None;
+  }
+}
 function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
   return switch(self){
     case Some(n) : fn(n);
@@ -24,6 +30,9 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
   static public function Unit<E>():Error<E>{
     return new stx.fail.term.Unit().toError();
   }
+  static public function Caught<E>(data,next,pos,exception):Error<E>{
+    return new stx.fail.term.Caught(data,next,pos,exception).toError();
+  }
   public function map<EE>(fn:E->EE):Error<EE>{
     return new stx.fail.term.MapAnon(this,fn).toError();
   }
@@ -32,6 +41,11 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
   }
   public function errata<EE>(fn:Error<E>->Error<EE>):Error<EE>{
     return new stx.fail.term.ErrataAnon(this,fn).toError();
+  }
+  @:to public function toIterable():Iterable<Error<E>>{
+    return {
+      iterator : this.iterator
+    };
   }
 }
 interface ErrorApi<E>{
@@ -54,6 +68,7 @@ interface ErrorApi<E>{
   public function toString():String;
   public function is_defined():Bool;
   public function raise():Void;
+  public function elide():Error<Dynamic>;
 }
 abstract class ErrorCls<E> implements ErrorApi<E>{
 
@@ -108,5 +123,8 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
         default      : false;
       }
     }
+  }
+  public function elide():Error<Dynamic>{
+    return cast this.toError();
   }
 }

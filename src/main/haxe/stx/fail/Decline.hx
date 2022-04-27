@@ -42,7 +42,7 @@ class DeclineLift{
       }
     );
   }
-  static  public function value<T>(self:DeclineSum<T>):Option<T>{
+  static  public function option<T>(self:DeclineSum<T>):Option<T>{
     return fold(
       self,
       Some,

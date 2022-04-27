@@ -1,6 +1,6 @@
 package stx.fail.term;
 
-using stx.fail.term.GlitchConcat;
+using stx.fail.term.ErrorConcat;
 
 function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
   return switch(self){
@@ -8,20 +8,20 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
     default      : None;
   }
 }
-class GlitchConcat<E> extends GlitchCls<E>{
-  final lhs : Option<Glitch<E>>;
-  final rhs : Option<Glitch<E>>;
+class ErrorConcat<E> extends ErrorCls<E>{
+  final lhs : Option<Error<E>>;
+  final rhs : Option<Error<E>>;
 
-  public function get_next():Option<Glitch<E>>{
+  public function get_next():Option<Error<E>>{
     return switch(this.lhs){
-      case Some(x)  : Some(new GlitchConcat(x.next,rhs).toGlitch());
+      case Some(x)  : Some(new ErrorConcat(x.next,rhs).toError());
       case None     : switch(this.rhs){
-        case Some(x) : Some(new GlitchConcat(None,x.next).toGlitch());
+        case Some(x) : Some(new ErrorConcat(None,x.next).toError());
         case None    : None;
       }
     }
   }
-  private function active():Option<Glitch<E>>{
+  private function active():Option<Error<E>>{
     return switch(lhs){
       case Some(_) : lhs;
       case None    : rhs;

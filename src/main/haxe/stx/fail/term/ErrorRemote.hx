@@ -1,6 +1,6 @@
 package stx.fail.term;
 
-class GlitchRemote<E> extends GlitchCls<Decline<E>>{
+class ErrorRemote<E> extends ErrorCls<Decline<E>>{
   final delegate : Iterator<E>;
  
   public function new(delegate:Iterator<E>,pos:Option<Pos>){
@@ -11,8 +11,8 @@ class GlitchRemote<E> extends GlitchCls<Decline<E>>{
   public function get_pos(){
     return this.pos;
   }
-  public function get_next():Option<Glitch<Decline<E>>>{
-    return this.delegate.hasNext() ? Some(new GlitchRemote(this.delegate,pos).toGlitch()) : None; 
+  public function get_next():Option<Error<Decline<E>>>{
+    return this.delegate.hasNext() ? Some(new ErrorRemote(this.delegate,pos).toError()) : None; 
   }
   public function get_data(){
     return this.data;

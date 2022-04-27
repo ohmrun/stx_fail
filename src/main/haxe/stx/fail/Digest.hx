@@ -33,4 +33,12 @@ class Digest implements DigestApi{
   public function asDigest():Digest{
     return this;
   }
+  @:noUsing static public function Foreign(detail:String){
+    return new DigestForeign(detail);
+  }
+}
+private class DigestForeign extends Digest{
+  public function new(detail,code=-1){
+    super("125cb1ae06784bb586e87ea8f57cdb6e",detail,code);
+  }
 }

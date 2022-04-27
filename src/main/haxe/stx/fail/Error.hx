@@ -14,7 +14,9 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
     default      : None;
   }
 }
+@:using(stx.fail.Error.ErrorLift)
 @:forward abstract Error<E>(ErrorApi<E>) from ErrorApi<E> to ErrorApi<E>{
+  static public var _(default,never) = ErrorLift;
   public function new(self) this = self;
   static public function lift<E>(self:ErrorApi<E>):Error<E> return new Error(self);
   @:noUsing static public function make<E>(data:Option<E>,next:Option<Error<E>>,pos:Option<Pos>){
@@ -126,5 +128,16 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
   }
   public function elide():Error<Dynamic>{
     return cast this.toError();
+  }
+}
+class ErrorLift{
+  static public function digest_with<E,EE>(self:Error<E>,fn:E->String):Refuse<EE>{
+    return Refuse.make(
+      self.data.map(
+        e -> INTERIOR(Digest.Foreign(fn(e)))
+      ),
+      self.next.map(digest_with.bind(_,fn)),
+      self.pos
+    );
   }
 }

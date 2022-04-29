@@ -43,6 +43,9 @@ typedef RefuseDef<E> = Error<Decline<E>>;
       default : Left(self.elide());
     }
   }
+  public function concat(that):Refuse<E>{
+    return lift(this.concat(that));
+  }
 }
 class RefuseLift{
   static public function usher<E,Z>(self:RefuseDef<E>,fn:Option<Decline<E>>->Z):Z{

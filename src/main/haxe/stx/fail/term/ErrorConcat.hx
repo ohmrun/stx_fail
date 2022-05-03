@@ -13,30 +13,23 @@ class ErrorConcat<E> extends ErrorCls<E>{
   final rhs : Option<Error<E>>;
 
   public function get_next():Option<Error<E>>{
-    return switch(this.lhs){
-      case Some(x)  : Some(new ErrorConcat(x.next,rhs).toError());
-      case None     : switch(this.rhs){
-        case Some(x) : Some(new ErrorConcat(None,x.next).toError());
-        case None    : None;
-      }
-    }
-  }
-  private function active():Option<Error<E>>{
-    return switch(lhs){
-      case Some(_) : lhs;
-      case None    : rhs;
-    }
+    return lhs.flat_map(
+      x -> x.next
+    ).map(
+      x -> new ErrorConcat(x,rhs).toError()
+    ).or(() -> rhs);
   }
   public function get_data(){
-    return active().flat_map(x -> x.data);
+    return lhs.flat_map(x -> x.data);
   }
   public function get_pos(){
-    return active().flat_map(x -> x.pos);
+    return lhs.flat_map(x -> x.pos);
   }
   public function get_stack():Option<CallStack>{
-    return active().flat_map(x -> x.stack);
+    return lhs.flat_map(x -> x.stack);
   }
   public function new(lhs,rhs){
+    //trace('concat');
     this.lhs = lhs;
     this.rhs = rhs;
   }

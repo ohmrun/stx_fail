@@ -13,7 +13,7 @@
     "version": "0.1.0",
     "url": "https://github.com/ohmrun/stx_Error",
     "dependencies": {
-        
+        "stx_pico"      : "git:https://github.com/ohmrun/stx_pico.git"
     },
     "classPath": "src/main/haxe"
 }

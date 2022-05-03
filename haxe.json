@@ -1,7 +1,7 @@
 {
   "build" : {
     "-cp"  : ["src/main/haxe"],
-    "-lib" : [],
+    "-lib" : ["stx_pico"],
     "unit" : {
       "--macro" : [
         "include('stx.fail',true)"

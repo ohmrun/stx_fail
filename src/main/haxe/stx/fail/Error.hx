@@ -49,6 +49,9 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
       iterator : this.iterator
     };
   }
+  public function is_unit(){
+    return (!this.data.is_defined()) && (!this.pos.is_defined()) && (!this.stack.is_defined());
+  }
 }
 interface ErrorApi<E>{
   public var pos(get,null) : Option<Pos>;
@@ -90,10 +93,28 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
     return this;
   }
   public function concat(that:Error<E>):Error<E>{
-    return new stx.fail.term.ErrorConcat(Some(this.toError()),Some(that)).toError();
+    final lhs = this.toError();
+    final rhs = that.toError();
+    //trace('[${lhs.is_unit()},${rhs.is_unit()}]');
+    return switch([lhs.is_unit(),rhs.is_unit()]){
+      case [true,true]    : lhs;
+      case [false,true]   : lhs;
+      case [true,false]   : rhs;
+      case [false,false]  : new stx.fail.term.ErrorConcat(Some(lhs),Some(rhs)).toError();
+    }
   }
   public function toString():String{
-    return 'Error($data) at $pos\n${stack}';
+    final f     = (x:Error<E>) -> {
+      final data  = x.data.map(x -> ' ($x)').defv('');
+      final pos   = x.pos.map(x -> PosLift.toString(x)).map(x -> ' at $x');
+      final stack = x.stack.map(x -> '\n$x').defv(''); 
+      return 'Error$data$pos$stack'; 
+    }
+    final arr   = [];
+    for(x in this.iterator()){
+      arr.push(f(x));
+    }
+    return arr.join("\n");
   }
   final public function iterator(){
     var self : Option<Error<E>> = Some(this.toError());
@@ -103,6 +124,7 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
       },
       next : () -> {
         var data = self;
+        //trace(data);
         self = self.flat_map(x -> x.next);
         return switch(data){
           case Some(v)  : v;

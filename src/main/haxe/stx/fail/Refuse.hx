@@ -51,4 +51,7 @@ class RefuseLift{
   static public function usher<E,Z>(self:RefuseDef<E>,fn:Option<Decline<E>>->Z):Z{
     return fn(self.data);
   }
+  static public function report<E>(self:RefuseDef<E>):stx.nano.Report<E>{
+    return stx.nano.Report.conf(self);
+  }
 }

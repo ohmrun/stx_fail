@@ -61,3 +61,8 @@ typedef ErrorConcat<E>      = stx.fail.term.ErrorConcat<E>;
 // 	public var native(get,never):Any;
 //   function details():String;
 // }
+class Fail{
+  static public function explain(self:haxe.Exception):Digest{
+    return Digest.Foreign(self.details());
+  }
+}

@@ -62,7 +62,7 @@ Pos is optional because some macro contexts don't have position information avai
 
 Internal errors are specified by `stx.fail.Digest` which contains a code for console or http error codes and a uuid for making bug reports comprehensible.
 
-Getting around the `uuid` constraint is as simple as using `Digest.foreign`
+Getting around the `uuid` constraint is as simple as using `Digest.Foreign(details)`
 
 ## EXTERNAL errors
 

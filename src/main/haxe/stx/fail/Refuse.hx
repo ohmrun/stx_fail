@@ -28,6 +28,9 @@ typedef RefuseDef<E> = Error<Decline<E>>;
   public function errate<EE>(fn:E->EE):Refuse<EE>{
     return new stx.fail.term.MapAnon(this,Decline._.map.bind(_,fn)).toError();
   }
+  /**
+    For those nooks where `catch` is annoying.
+  **/
   static public function catcher(self:Error<Dynamic>):Either<Error<Dynamic>,Refuse<Dynamic>>{
     final _enum : Enum<Dynamic> = Type.getEnum(EXTERNAL(null));
     return switch(self.data){
@@ -48,6 +51,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
   }
 }
 class RefuseLift{
+  //TODO, this only gets one part of the list
   static public function usher<E,Z>(self:RefuseDef<E>,fn:Option<Decline<E>>->Z):Z{
     return fn(self.data);
   }

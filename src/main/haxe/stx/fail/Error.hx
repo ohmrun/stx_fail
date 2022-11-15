@@ -153,6 +153,9 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
   }
 }
 class ErrorLift{
+  /**
+    Turn this error into an `INTERNAL` error and produce an openly typed Refuse<EE>  
+  **/
   static public function digest_with<E,EE>(self:Error<E>,fn:E->String):Refuse<EE>{
     return Refuse.make(
       self.data.map(

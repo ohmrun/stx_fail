@@ -66,7 +66,7 @@ Getting around the `uuid` constraint is as simple as using `Digest.foreign`
 
 ## EXTERNAL errors
 
-External errors can be of any type, but are typically enums or abstracts over enums to allow integration into higher systems
+External errors can be of any type, but are typically enums or abstracts over enums to allow integration into higher systems via pattern matching.
 
 ## stx.fail.Decline
 
@@ -80,7 +80,7 @@ enum DeclineSum<E>{
 
 ## stx.fail.Refuse
 
-This is the type of Error most typically used. INTERNAL errors are passed along but typically not found in the pattern matching code.
+This is the type of Error most typically used. `INTERNAL` errors are passed along but typically not found in the pattern matching code.
 
 ```haxe
   typedef RefuseDef<E> = Error<Decline<E>>;
@@ -110,7 +110,7 @@ This is the type of Error most typically used. INTERNAL errors are passed along 
     var e1 = __.fault( ).of(E_SomeOtherError);//Refuse<ErrorVal>
 
     var e2 = e0.next(e1);//both of these errors now available downstream.
-    var e3 = __.fault().err(Digest.E_ResourceNotFound);//Refuse<Unknown>;
+    var e3 = __.fault().digest(Digest.E_ResourceNotFound);//Refuse<Unknown>;
 
     var e4 = e2.next(e3);//Type compatible
 
@@ -130,3 +130,49 @@ This is the type of Error most typically used. INTERNAL errors are passed along 
     }
   }
 ```
+
+see [here](https://github/ohmrun/stx_nano) for [Wildcard](https://github.com/ohmrun/stx_nano/blob/develop/src/main/haxe/stx/nano/Wildcard.hx) methods
+
+## Error
+
+### Constructor
+
+```haxe
+static public function make<E>(data:Option<E>,next:Option<Error<E>>,pos:Option<Pos>);
+```
+
+## Refuse
+
+### Constructor
+
+```haxe 
+static public function make<E>(data:Option<Decline<E>>,next:Option<Error<Decline<E>>>,pos:Option<Pos>)
+```
+
+
+```haxe
+static public function pure<E>(v:E)
+```
+
+## Functional Errors
+
+  In functional programming, it is common to consider an error part of a return type and pass it along, rather than to throw it. 
+  
+  This is particularly useful in multithreaded environments where it is necessary to make sure the error makes it back to the main thread to be reported correctly.
+
+  In the stx libraries, the `Refuse` `EXTERNAL` type value is denoted `E` and each library has it's own enumeration found in `stx.fail.${LIBRARY_NAME}Failure`.
+
+## Static Extensions
+
+
+### **explain** (stx.Fail.explain)
+Turns an Exception into a Digest
+```haxe
+  explain(self:haxe.Exception):Digest;
+```
+
+typical usage:  
+```haxe 
+  __.fault().digest(exception.explain());
+```
+

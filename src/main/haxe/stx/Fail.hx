@@ -1,28 +1,5 @@
 package stx;
 
-
-/**
-  haxe
-    Exception
-
-  **Failure
-  Errata
-  Error
-  Decline
-    EXTERNAL(v:T);//ERR_OF
-    INTERNAL(digest:Digest);
-  Digest`
-  Refuse
-
-  Res
-    Accept
-    Reject
-  Outcome
-    Success
-    Failure
-  
-    
-**/
 #if !stx_pico
 @:pure typedef PosDef = 
   #if macro
@@ -30,6 +7,7 @@ package stx;
   #else
     haxe.PosInfos;
   #end
+#elseif
 typedef Pos                     = PosDef;
 #end
 
@@ -46,22 +24,8 @@ typedef Digest              = stx.fail.Digest;
 typedef ErrorRemote<E>      = stx.fail.term.ErrorRemote<E>;
 typedef ErrorConcat<E>      = stx.fail.term.ErrorConcat<E>;
 
-
-// typedef ExceptionDef            = {
-//   public var message(get,never):String;
-// 	public var stack(get,never):CallStack;
-// 	//public var previous(get,never):Null<Exception>;
-// 	public var native(get,never):Any;
-//   function details():String;
-// }
-// interface ExceptionApi {
-//   public var message(get,never):String;
-// 	public var stack(get,never):CallStack;
-// 	//public var previous(get,never):Null<Exception>;
-// 	public var native(get,never):Any;
-//   function details():String;
-// }
 class Fail{
+  /****/
   static public function explain(self:haxe.Exception):Digest{
     return Digest.Foreign(self.details());
   }

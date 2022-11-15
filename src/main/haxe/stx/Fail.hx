@@ -9,8 +9,8 @@ package stx;
   Errata
   Error
   Decline
-    EXTERIOR(v:T);//ERR_OF
-    INTERIOR(digest:Digest);
+    EXTERNAL(v:T);//ERR_OF
+    INTERNAL(digest:Digest);
   Digest`
   Refuse
 

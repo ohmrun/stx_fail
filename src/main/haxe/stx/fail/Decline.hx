@@ -1,8 +1,8 @@
 package stx.fail;
 
 enum DeclineSum<E>{
-  EXTERIOR(v:E);
-  INTERIOR(digest:Digest);
+  EXTERNAL(v:E);
+  INTERNAL(digest:Digest);
 }
 @:using(stx.fail.Decline.DeclineLift)
 abstract Decline<T>(DeclineSum<T>) from DeclineSum<T> to DeclineSum<T>{
@@ -11,32 +11,63 @@ abstract Decline<T>(DeclineSum<T>) from DeclineSum<T> to DeclineSum<T>{
   @:noUsing static public inline function lift<T>(self:DeclineSum<T>):Decline<T> return new Decline(self);
 
   @:from static public function fromDigest<T>(code:Digest):Decline<T>{
-    return INTERIOR(code);
+    return INTERNAL(code);
   }
   static public function fromErrOf<T>(v:T):Decline<T>{
-    return EXTERIOR(v);
+    return EXTERNAL(v);
+  }
+  public function iterator(){
+    return {
+      next : () -> {
+        return switch(this){
+          case EXTERNAL(v) : v;
+          default : null;
+        }
+      },
+      hasNext : () -> {
+        return switch(this){
+          case EXTERNAL(v) : true;
+          default          : false;
+        }
+      }
+    }
   }
   public function prj():Decline<T> return this;
   private var self(get,never):Decline<T>;
   private function get_self():Decline<T> return lift(this);
+
 }
 class DeclineLift{
   static public function fold<T,Z>(self:DeclineSum<T>,val:T->Z,def:Digest->Z):Z{
     return switch(self){
-      case EXTERIOR(v)    :  val(v);
-      case INTERIOR(e)    :  def(e);
+      case EXTERNAL(v)    :  val(v);
+      case INTERNAL(e)    :  def(e);
     }
+  }
+  static public function is_EXTERNAL<T,Z>(self:DeclineSum<T>){
+    return fold(
+      self,
+      _ -> true,
+      _ -> false
+    );
+  }
+  static public function EXTERNAL<T,Z>(self:DeclineSum<T>){
+    return fold(
+      self,
+      v -> Some(v),
+      _ -> None
+    );
   }
   static public function fold_filter<T>(self:DeclineSum<T>,val:T->Bool,def:Digest->Bool):Option<Decline<T>>{
     return fold(
       self,
       (x) -> if(val(x)){
-        Some(EXTERIOR(x));
+        Some(EXTERNAL(x));
       }else{
         None;
       },
       x -> if(def(x)){
-        Some(INTERIOR(x));
+        Some(INTERNAL(x));
       }else{
         None;
       }
@@ -60,8 +91,8 @@ class DeclineLift{
     return Decline.lift(
       fold(
         self,
-        x -> EXTERIOR(fn(x)),
-        y -> INTERIOR(y)      
+        x -> EXTERNAL(fn(x)),
+        y -> INTERNAL(y)      
       )
     );
   }

@@ -5,7 +5,7 @@ class ErrorRemote<E> extends ErrorCls<Decline<E>>{
  
   public function new(delegate:Iterator<E>,pos:Option<Pos>){
     this.delegate = delegate;
-    this.data     = Some(EXTERIOR(delegate.next()));
+    this.data     = Some(EXTERNAL(delegate.next()));
     this.pos      = pos;
   }
   public function get_pos(){

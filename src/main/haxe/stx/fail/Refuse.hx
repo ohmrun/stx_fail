@@ -2,7 +2,7 @@ package stx.fail;
 
 import haxe.ds.Either;
 /**
-  Either an INTERIOR (unhandled) or EXTERIOR (E) Error
+  Either an INTERNAL (unhandled) or EXTERNAL (E) Error
 **/
 typedef RefuseDef<E> = Error<Decline<E>>;
 
@@ -16,7 +16,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
     return lift(new stx.fail.term.Base(data,next,pos));
   }
   @:noUsing static public function pure<E>(v:E){
-    return make(Some(EXTERIOR(v)),None,None);
+    return make(Some(EXTERNAL(v)),None,None);
   }
   public function prj():RefuseDef<E> return this;
   private var self(get,never):Refuse<E>;
@@ -29,7 +29,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
     return new stx.fail.term.MapAnon(this,Decline._.map.bind(_,fn)).toError();
   }
   static public function catcher(self:Error<Dynamic>):Either<Error<Dynamic>,Refuse<Dynamic>>{
-    final _enum : Enum<Dynamic> = Type.getEnum(EXTERIOR(null));
+    final _enum : Enum<Dynamic> = Type.getEnum(EXTERNAL(null));
     return switch(self.data){
       case Some(x) : switch(std.Type.typeof(x)){
         case TEnum(e) : switch(e){

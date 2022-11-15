@@ -156,7 +156,7 @@ class ErrorLift{
   static public function digest_with<E,EE>(self:Error<E>,fn:E->String):Refuse<EE>{
     return Refuse.make(
       self.data.map(
-        e -> INTERIOR(Digest.Foreign(fn(e)))
+        e -> INTERNAL(Digest.Foreign(fn(e)))
       ),
       self.next.map(digest_with.bind(_,fn)),
       self.pos

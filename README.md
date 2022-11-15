@@ -1,7 +1,7 @@
 # stx_fail
 
 ## Usage
-  The convenience functions for this library are found in `stx_nano` as that library introduces a global scope system for the stx ecosystem.
+  The convenience functions for this library are found in `stx_nano` as that library introduces the wildcard system.
 
 ```haxe
   using stx.Nano;
@@ -19,7 +19,7 @@ This library distinguishes between two sorts of error:
 `INTERNAL` -> Fatal errors meant to report to the user/developer  
 `EXTERNAL` -> To pattern match from supersystems
 
-While we use `haxe.Exception` internal, construction is lazy because exceptions are heavy to build due to creating stack information.  
+While we use `haxe.Exception` internally, construction is lazy because exceptions are heavy to build due to needing stack information.  
 
 For this reason, and some subclassing wrinkles `stx.fail.Error.ErrorApi` is outside of the class hierarchy of `haxe.Exception`
 

@@ -18,8 +18,8 @@ class Digest implements DigestApi{
     this.code   = code;
     
     if(register.exists(uuid)){
-      final val = register.get(uuid);
-      final identifier = std.Type.getClassName(std.Type.getClass(this));
+      final val         = register.get(uuid);
+      final identifier  = std.Type.getClassName(std.Type.getClass(this));
       if(Type.getClass(val) != Type.getClass(this)){
         throw 'Digest identifier $uuid on ${identifier} already registered for $val';
       }

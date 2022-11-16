@@ -40,8 +40,8 @@ abstract Decline<T>(DeclineSum<T>) from DeclineSum<T> to DeclineSum<T>{
 class DeclineLift{
   static public function fold<T,Z>(self:DeclineSum<T>,val:T->Z,def:Digest->Z):Z{
     return switch(self){
-      case EXTERNAL(v)    :  val(v);
-      case INTERNAL(e)    :  def(e);
+      case DeclineSum.EXTERNAL(v)    :  val(v);
+      case DeclineSum.INTERNAL(e)    :  def(e);
     }
   }
   static public function is_EXTERNAL<T,Z>(self:DeclineSum<T>){
@@ -62,7 +62,7 @@ class DeclineLift{
     return fold(
       self,
       (x) -> if(val(x)){
-        Some(EXTERNAL(x));
+        Some(DeclineSum.EXTERNAL(x));
       }else{
         None;
       },
@@ -91,8 +91,8 @@ class DeclineLift{
     return Decline.lift(
       fold(
         self,
-        x -> EXTERNAL(fn(x)),
-        y -> INTERNAL(y)      
+        x -> DeclineSum.EXTERNAL(fn(x)),
+        y -> DeclineSum.INTERNAL(y)      
       )
     );
   }

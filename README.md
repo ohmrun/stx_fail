@@ -176,3 +176,43 @@ typical usage:
   __.fault().digest(exception.explain());
 ```
 
+## Errata and Errate
+
+`errata` gives you the ability to edit the entire error in whatever carrier you are using. 
+```haxe
+  typedef Mod<E,EE> = (e:Error<E>) -> Error<EE>;
+```
+
+`errate` lets you modify that data carried by an error
+```haxe
+  typedef Mod<E,EE> = E -> EE;
+```
+
+## Subsystem / SuperSystem relationship.
+
+If you want to pass a typed error from a subsystem to a supersystem without the supersystem requiring that the subsystem knows the type(which would confuse their relationship) then use an `Embed`;
+
+```haxe
+  enum SomeFailure{
+    ///..
+    E_Some_Embed(block:Void->Void)
+    //...
+  }
+```
+to setup
+```haxe
+  final embed = __.nano().embed();
+  final error = e.errata(e -> e.errate(x -> E_Some_Embed(embed.pack(e))));
+  //...later
+  switch(error.data){
+    case E_Some_Embed(fn) : 
+      final typed_error = embed.unpack(fn).fudge();
+    default :  
+  }
+```
+
+or you can use the block to throw the error later
+
+```haxe
+  e.errata(e -> e.errate(x -> E_Some_Embed(() -> throw(e))));
+```

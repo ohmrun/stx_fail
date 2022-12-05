@@ -202,7 +202,7 @@ If you want to pass a typed error from a subsystem to a supersystem without the 
 to setup
 ```haxe
   final embed = __.nano().embed();
-  final error = e.errata(e -> e.errate(x -> E_Some_Embed(embed.pack(e))));
+  final error = value.errata(eI -> eI.errate(eII -> E_Some_Embed(embed.pack(eI))));
   //...later
   switch(error.data){
     case E_Some_Embed(fn) : 

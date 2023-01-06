@@ -5,15 +5,15 @@
         "cross",
         "functional"
     ],
-    "description": "",
+    "description": "Easy granular error system",
     "contributors": [
         "0b1kn00b"
     ],
-    "releasenote": "",
-    "version": "0.1.0",
-    "url": "https://github.com/ohmrun/stx_Error",
+    "releasenote": "bump",
+    "version": "0.2.0",
+    "url": "https://github.com/ohmrun/stx_fail",
     "dependencies": {
-        "stx_pico"      : "git:https://github.com/ohmrun/stx_pico.git"
+        "stx_pico"      : "2.0.0"
     },
     "classPath": "src/main/haxe"
 }

@@ -1,0 +1,3 @@
+hxml/libs.hxml
+-cp src/main/haxe
+--macro include('stx.fail',true)

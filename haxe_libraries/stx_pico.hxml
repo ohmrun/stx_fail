@@ -1,0 +1,6 @@
+-lib tink_core
+-lib tink_runloop
+-cp ${SCOPE_DIR}/../stx_pico/src/main/haxe
+-D stx_pico=2.0.0
+${SCOPE_DIR}/../stx_pico/extraParams.hxml
+--macro Sys.println("haxe_libraries/stx_pico.hxml:4: [Warning] Using dev version of library stx_pico")

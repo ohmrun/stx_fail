@@ -2,7 +2,7 @@ package stx.fail;
 
 /**
   Represents information about an error. 
-  `uuid` is intended to be unique, but this is currently not enforced.
+  `uuid` is intended to be unique to make web search easier.
 **/
 class Digest implements DigestApi{
   static public var register(get,null) : haxe.ds.StringMap<Digest>;

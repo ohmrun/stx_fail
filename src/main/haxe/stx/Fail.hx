@@ -1,15 +1,5 @@
 package stx;
 
-#if !stx_pico
-@:pure typedef PosDef = 
-  #if macro
-    haxe.macro.Expr.Position;
-  #else
-    haxe.PosInfos;
-  #end
-#elseif
-typedef Pos                     = PosDef;
-#end
 
 typedef Decline<E>          = stx.fail.Decline<E>;
 typedef DeclineSum<E>       = stx.fail.Decline.DeclineSum<E>;

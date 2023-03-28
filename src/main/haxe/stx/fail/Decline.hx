@@ -44,14 +44,14 @@ class DeclineLift{
       case DeclineSum.INTERNAL(e)    :  def(e);
     }
   }
-  static public function is_EXTERNAL<T,Z>(self:DeclineSum<T>){
+  static public function is_external<T,Z>(self:DeclineSum<T>){
     return fold(
       self,
       _ -> true,
       _ -> false
     );
   }
-  static public function EXTERNAL<T,Z>(self:DeclineSum<T>){
+  static public function external<T,Z>(self:DeclineSum<T>){
     return fold(
       self,
       v -> Some(v),

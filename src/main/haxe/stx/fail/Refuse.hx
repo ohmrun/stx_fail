@@ -51,7 +51,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
   }
 }
 class RefuseLift{
-  //TODO, this only gets one part of the list
+  // TODO, this only gets one part of the list
   static public function usher<E,Z>(self:RefuseDef<E>,fn:Option<Decline<E>>->Z):Z{
     return fn(self.data);
   }

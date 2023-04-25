@@ -72,7 +72,7 @@ interface ErrorApi<E>{
 
   public function toString():String;
   public function is_defined():Bool;
-  public function raise():Void;
+  public function crack():Void;
   public function elide():Error<Dynamic>;
 }
 abstract class ErrorCls<E> implements ErrorApi<E>{
@@ -133,7 +133,7 @@ abstract class ErrorCls<E> implements ErrorApi<E>{
       }
     }
   }
-  public function raise():Void{
+  public function crack():Void{
     switch(this.data){
       case Some(x) : throw(x);
       default      : throw 'ERROR'; 

@@ -45,7 +45,7 @@ interface ErrorApi<E>{
 
   public function toString():String;
   public function is_defined():Bool;
-  public function raise():Void;
+  public function crack():Void;
   public function elide():Error<Dynamic>;
 }
 ```

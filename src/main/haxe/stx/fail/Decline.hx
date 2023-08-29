@@ -16,6 +16,10 @@ enum DeclineSum<E>{
    * Programmer defined error state of type `E`
    */
   EXTERNAL(v:E);
+  /**
+   * Contains a `stx.pico.Embed` that can be unpacked later so type constraints can be maintained where control is delegated to a subsystem.
+   */
+  SECRETED(v:Void->Void);
 }
 /**
  * @see https://github.com/ohmrun/docs/blob/main/projection.md
@@ -68,14 +72,15 @@ abstract Decline<T>(DeclineSum<T>) from DeclineSum<T> to DeclineSum<T>{
 }
 class DeclineLift{
   /** 
-   * @see https://github.com/ohmrun/docs/blob/projection/main/fold.md
+   * @see docs/blob/projection/main/fold.md
    * @param self 
    * @return String
    */
-  static public function fold<T,Z>(self:DeclineSum<T>,val:T->Z,def:Digest->Z):Z{
+  static public function fold<T,Z>(self:DeclineSum<T>,val:T->Z,def:Digest->Z,ext:(Void->Void)->Z):Z{
     return switch(self){
       case DeclineSum.EXTERNAL(v)    :  val(v);
       case DeclineSum.INTERNAL(e)    :  def(e);
+      case DeclineSum.SECRETED(f)    :  ext(f);
     }
   }
   /**
@@ -88,6 +93,7 @@ class DeclineLift{
     return fold(
       self,
       _ -> true,
+      _ -> false,
       _ -> false
     );
   }
@@ -101,11 +107,12 @@ class DeclineLift{
     return fold(
       self,
       v -> Some(v),
+      _ -> None,
       _ -> None
     );
   }
   /**
-   * Allows filtering of value of either `INTERNAL` or `EXST
+   * Allows filtering of value of either `INTERNAL` or `EXT
    * @param self 
    * @param fn 
    * @return Decline<EE>
@@ -122,13 +129,15 @@ class DeclineLift{
         Some(INTERNAL(x));
       }else{
         None;
-      }
+      },
+      (_) -> None
     );
   }
   static  public function option<T>(self:DeclineSum<T>):Option<T>{
     return fold(
       self,
       Some,
+      (_) -> None,
       (_) -> None
     );
   }
@@ -136,7 +145,8 @@ class DeclineLift{
     return fold(
       self,
       (v) -> Std.string(v),
-      (n) -> n.toString()
+      (n) -> n.toString(),
+      (_) -> 'SECRETED ERROR'
     );
   }
   /**
@@ -151,7 +161,19 @@ class DeclineLift{
       fold(
         self,
         x -> DeclineSum.EXTERNAL(fn(x)),
-        y -> DeclineSum.INTERNAL(y)      
+        y -> DeclineSum.INTERNAL(y),      
+        z -> DeclineSum.SECRETED(z)
+      )
+    );
+  }
+  static public function disembed<E,EE>(self:DeclineSum<E>,fn:Embed<EE>):Decline<EE>{
+    return fold(
+      self,
+      e -> DeclineSum.INTERNAL(Digest.Secrete('Error not SECRETED, found instead ${e}')),
+      y -> DeclineSum.INTERNAL(y),
+      z -> fn.unpack(z).fold(
+        ok -> DeclineSum.EXTERNAL(ok),
+        () -> DeclineSum.INTERNAL(Digest.Secrete('Embed does not contain SECRETED value'))
       )
     );
   }

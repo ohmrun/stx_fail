@@ -8,6 +8,9 @@ function flat_map<Ti,Tii>(self:Option<Ti>,fn:Ti->Option<Tii>):Option<Tii>{
     default      : None;
   }
 }
+/**
+ * Auxiliary type tha wraps two `Error`s as 
+ */
 class ErrorConcat<E> extends ErrorCls<E>{
   final lhs : Option<Error<E>>;
   final rhs : Option<Error<E>>;

@@ -37,6 +37,9 @@ class Digest implements DigestApi{
   @:noUsing static public function Foreign(detail:String){
     return new DigestForeign(detail);
   }
+  @:noUsing static public function Secrete(detail:String){
+    return new stx.fail.digest.Secrete(detail);
+  }
 }
 private class DigestForeign extends Digest{
   public function new(detail,code=-1){

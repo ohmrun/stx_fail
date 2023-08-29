@@ -52,7 +52,7 @@ interface ErrorApi<E>{
 
 ### concat
 
-Concat allows you to accumulate errors with out creating extra types.
+Concat allows you to accumulate errors without creating extra types.
 
 ### pos
 

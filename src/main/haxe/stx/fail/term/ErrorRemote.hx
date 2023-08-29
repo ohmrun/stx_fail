@@ -1,5 +1,8 @@
 package stx.fail.term;
 
+/**
+ * Auxiliary type that wraps the contents of `Iterator` in an `Error` type.
+ */
 class ErrorRemote<E> extends ErrorCls<Decline<E>>{
   final delegate : Iterator<E>;
  

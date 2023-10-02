@@ -60,4 +60,14 @@ class RefuseLift{
     return stx.nano.Report.conf(self);
   }
   #end
+  static public function embed<E,EE>(self:Refuse<E>,embed:Embed<E>):Refuse<EE>{
+    return self.map(
+      e -> e.embed(embed)
+    );
+  }
+  static public function disembed<E,EE>(self:Refuse<E>,embed:Embed<EE>):Refuse<EE>{
+    return self.map(
+      e -> e.disembed(embed)
+    );
+  }
 }

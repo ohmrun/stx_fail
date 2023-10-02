@@ -177,4 +177,12 @@ class DeclineLift{
       )
     );
   }
+  static public function embed<E,EE>(self:DeclineSum<E>,fn:Embed<E>):Decline<EE>{
+    return fold(
+      self,
+      e -> DeclineSum.SECRETED(fn.pack(e)),
+      y -> DeclineSum.INTERNAL(y),
+      z -> DeclineSum.INTERNAL(Digest.Secrete('Cannot embed a SECRETED error'))
+    );
+  }
 }
